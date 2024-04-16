@@ -5,34 +5,18 @@ from PIL import Image
 import torch
 from torch.utils import data
 from torchvision.transforms import v2
-unloader = v2.ToPILImage()  # reconvert into PIL image
-plt.ion()
-
-def imshow(tensor, title=None):
-    image = tensor.cpu().clone()  # we clone the tensor to not do changes on it
-    image = image.squeeze(0)      # remove the fake batch dimension
-    image = unloader(image)
-    plt.imshow(image)
-    if title is not None:
-        plt.title(title)
-    plt.pause(0.001) # pause a bit so that plots are updated
-
-
 
 def getData(root, mode):
     if mode == 'train':
-        #df = pd.read_csv(f'{root}/train.csv', nrows=1000)
         df = pd.read_csv(f'{root}/train.csv')
-        path = df['filepaths'].tolist()
-        labels = df['labels'].tolist()
-        label_id = df['label_id'].tolist()
-        return path, labels, label_id
+    elif mode == 'valid':
+        df = pd.read_csv(f'{root}/valid.csv')
     else:
         df = pd.read_csv(f'{root}/test.csv')
-        path = df['filepaths'].tolist()
-        labels = df['labels'].tolist()
-        label_id = df['label_id'].tolist()
-        return path, labels, label_id
+    path = df['filepaths'].tolist()
+    labels = df['labels'].tolist()
+    label_id = df['label_id'].tolist()
+    return path, labels, label_id
 
 class BufferflyMothLoader(data.Dataset):
     def __init__(self, root, mode, batch_size = None):
@@ -46,7 +30,7 @@ class BufferflyMothLoader(data.Dataset):
         self.root = root
         self.img_name, self.labels, self.label_id = getData(root, mode)
         self.mode = mode
-        self.total_labels = len(set(self.labels))
+        #self.total_labels = len(set(self.labels))
         self.batch_size = batch_size
         print("> Found %d images..." % (len(self.img_name)))  
 
@@ -79,26 +63,38 @@ class BufferflyMothLoader(data.Dataset):
         ground_truth_label_id = self.label_id[index]
 
         img = Image.open(path)
-        img_np = np.array(img)
-        img_np = img_np.astype(np.float32)
-        img_np = img_np / 255
-        img_transpose = np.transpose(img_np, (2,0,1))
-        img_torch = torch.from_numpy(img_transpose).cuda()
+        #img_np = np.array(img)
+        #img_np = img_np.astype(np.float32)
+        
+        #img_transpose = np.transpose(img_np, (2,0,1))
+        #img_torch = torch.from_numpy(img_np).cuda()
         #print(img_torch.shape)
         #print(img_torch.shape)
-        ground_truth_label_id = torch.tensor([ground_truth_label_id]).cuda()
         if self.mode == 'train':
             transforms = v2.Compose([
-                v2.ToDtype(torch.float32, scale=True),
+                #v2.ToDtype(torch.float32, scale=True),
                 v2.RandomResizedCrop(size=(224, 224), antialias=True),
-                #v2.RandomHorizontalFlip(p=0.5),
+                v2.RandomHorizontalFlip(p=0.5),
+                v2.RandomRotation(degrees=15),
+                v2.RandomAffine(degrees=0, translate=(0.1, 0.1)),
+                v2.RandomZoomOut(),
+                v2.RandomCrop(size=(224, 224),padding=25,fill=125,padding_mode="edge"),
+                v2.ToTensor(),
                 v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
             ])
-            img = transforms(img_torch)
+            img_torch = transforms(img)
+            #print(img_torch.shape)
             #plt.figure()
             #imshow(img, title='Content Image')
-            img = img_torch.unsqueeze(0)
-            img = img.requires_grad_(True)
-            return img, ground_truth_label_id
-        img = img_torch.unsqueeze(0)
-        return img, ground_truth_label_id
+            #img = img_torch.unsqueeze(0)
+            #img = img.requires_grad_(True)
+            return img_torch, ground_truth_label_id
+        else:
+            transforms = v2.Compose([
+                #v2.ToDtype(torch.float32, scale=True),
+                v2.RandomResizedCrop(size=(224, 224), antialias=True),
+                v2.ToTensor(),
+                v2.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            ])
+            img_torch = transforms(img)
+            return img_torch, ground_truth_label_id

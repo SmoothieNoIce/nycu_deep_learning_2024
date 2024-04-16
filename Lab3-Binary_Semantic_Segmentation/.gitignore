@@ -1,0 +1,6 @@
+/dataset
+*.pt
+*.pth
+*.pyc
+*.DS_Store
+/src/wandb
