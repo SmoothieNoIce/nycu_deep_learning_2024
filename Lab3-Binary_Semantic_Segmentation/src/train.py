@@ -20,7 +20,7 @@ from tqdm import tqdm
 import wandb
 from evaluate import evaluate
 from models.unet import UNet
-from models.resnet34_unet import UResNet50
+from models.resnet34_unet import UResNet34
 from oxford_pet import SimpleOxfordPetDataset
 from utils import dice_loss
 from matplotlib import pyplot as plt
@@ -237,7 +237,7 @@ if __name__ == '__main__':
     if args.model_select == 0:
         model = UNet(n_channels=3, n_classes=args.classes, bilinear=args.bilinear)
     else:
-        model = UResNet50(n_channels=3, n_classes=args.classes)
+        model = UResNet34(n_channels=3, n_classes=args.classes)
     model = model.to(memory_format=torch.channels_last)
 
     logging.info(f'Network:\n'

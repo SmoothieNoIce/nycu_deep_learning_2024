@@ -126,6 +126,6 @@ class UResnet(nn.Module):
         output = self.final(x0_4)
         return output
     
-def UResNet50(n_channels=3, n_classes=2):
-    UResnet50 = UResnet(block=BottleNeck,layers=[3,4,6,3], num_classes=n_classes)
-    return UResnet50
+def UResNet34(n_channels=3, n_classes=2):
+    UResnet34 = UResnet(block=BottleNeck,layers=[3,4,6,3], num_classes=n_classes)
+    return UResnet34

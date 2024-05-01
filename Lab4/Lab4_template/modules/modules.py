@@ -2,7 +2,7 @@ import torch.nn as nn
 import torch
 from .layers import DepthConvBlock, ResidualBlock
 from torch.autograd import Variable
-
+import torch.nn.functional as F
 
 __all__ = [
     "Generator",
@@ -76,11 +76,13 @@ class Gaussian_Predictor(nn.Sequential):
         )
         
     def reparameterize(self, mu, logvar):
-        # TODO
-        raise NotImplementedError
+        std = torch.exp(0.5*logvar)
+        eps = torch.randn_like(std)
+        return eps.mul(std).add_(mu)
 
     def forward(self, img, label):
         feature = torch.cat([img, label], dim=1)
+        #print(feature.shape)
         parm = super().forward(feature)
         mu, logvar = torch.chunk(parm, 2, dim=1)
         z = self.reparameterize(mu, logvar)

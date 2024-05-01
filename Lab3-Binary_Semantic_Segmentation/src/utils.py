@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import torch
 from torch import Tensor
 from models.unet import UNet
-from models.resnet34_unet import UResNet50
+from models.resnet34_unet import UResNet34
 from matplotlib import pyplot as plt
 
 def dice_score(pred_mask, gt_mask):
@@ -41,6 +41,7 @@ def plot_img_and_mask(img, mask):
     classes = mask.max() + 1
     fig, ax = plt.subplots(1, classes + 1)
     ax[0].set_title('Input image')
+    ax[0].imshow(img)
     for i in range(classes):
         ax[i + 1].set_title(f'Mask (class {i + 1})')
         ax[i + 1].imshow(mask == i)
@@ -57,7 +58,7 @@ if __name__ == '__main__':
     unet_model.load_state_dict(unet_state_dict['state_dict'])
     unet_epoch_loss_all = unet_state_dict["epoch_loss_all"]
     unet_val_loss_all = unet_state_dict["val_loss_all"]
-    res_model = UResNet50(n_channels=3, n_classes=2)
+    res_model = UResNet34(n_channels=3, n_classes=2)
     res_model = res_model.to(memory_format=torch.channels_last)
     res_state_dict = torch.load('../saved_models/res/checkpoint_epoch10.pth', map_location=device)
     res_model.load_state_dict(res_state_dict['state_dict'])

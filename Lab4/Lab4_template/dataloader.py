@@ -53,6 +53,7 @@ class Dataset_Dance(torchData):
 
             imgs.append(self.transform(imgloader(img_name)))
             labels.append(self.transform(imgloader(label_name)))
+        test = stack(imgs)
         return stack(imgs), stack(labels)
     
     

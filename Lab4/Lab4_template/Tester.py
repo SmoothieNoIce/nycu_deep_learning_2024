@@ -1,5 +1,7 @@
+#%%
 import os
 import argparse
+import sys
 import numpy as np
 import torch
 import torch.nn as nn
@@ -36,7 +38,11 @@ from glob import glob
 from torch.utils.data import Dataset as torchData
 from torchvision.datasets.folder import default_loader as imgloader
 
-
+def Generate_PSNR(imgs1, imgs2, data_range=1.):
+    """PSNR for torch tensor"""
+    mse = nn.functional.mse_loss(imgs1, imgs2) # wrong computation for batch size > 1
+    psnr = 20 * log10(data_range) - 10 * torch.log10(mse)
+    return psnr
 
 class Dataset_Dance(torchData):
     def __init__(self, root, transform, mode='test', video_len=7, partial=1.0):
@@ -44,7 +50,8 @@ class Dataset_Dance(torchData):
         self.img_folder = []
         self.label_folder = []
         
-        data_num = len(glob('./Demo_Test/*'))
+        data_num = 5
+        #data_num = len(glob('./Demo_Test/*'))
         for i in range(data_num):
             self.img_folder.append(sorted(glob(os.path.join(root , f'test/test_img/{i}/*')), key=get_key))
             self.label_folder.append(sorted(glob(os.path.join(root , f'test/test_label/{i}/*')), key=get_key))
@@ -120,15 +127,30 @@ class Test_model(VAE_Model):
         # label_list is used to store the label seq
         # Both list will be used to make gif
         decoded_frame_list = [img[0].cpu()]
-        label_list = []
 
         # TODO
-        raise NotImplementedError
+        last_frame_generator = None
+        loss = 0
+        for current_label_idx in range(0, len(label) - 1):
+            if current_label_idx == 0:
+                last_image = img[0][current_label_idx].unsqueeze(0)
+            else:
+                last_image = last_frame_generator
+
+            last_frame_encoder = self.frame_transformation.forward(last_image)
+            lab1 = label[current_label_idx]
+            label_encoder = self.label_transformation.forward(lab1)
+            z, mu, logvar = self.Gaussian_Predictor.forward(last_frame_encoder, label_encoder)
+            decoder = self.Decoder_Fusion.forward(last_frame_encoder, label_encoder, z)
+            last_frame_generator = self.Generator.forward(decoder)
+            test = last_frame_generator.cpu()
+            decoded_frame_list.append(test)
+
             
-        
+                
         # Please do not modify this part, it is used for visulization
         generated_frame = stack(decoded_frame_list).permute(1, 0, 2, 3, 4)
-        label_frame = stack(label_list).permute(1, 0, 2, 3, 4)
+        #label_frame = stack(label_list).permute(1, 0, 2, 3, 4)
         
         assert generated_frame.shape == (1, 630, 3, 32, 64), f"The shape of output should be (1, 630, 3, 32, 64), but your output shape is {generated_frame.shape}"
         
@@ -179,6 +201,7 @@ def main(args):
 
 
 if __name__ == '__main__':
+    sys.argv = ['Tester.py', '--DR', '../LAB4_Dataset', '--save_root', './testdata', '--ckpt_path' , './data-best/epoch=64.ckpt']
     parser = argparse.ArgumentParser(add_help=True)
     parser.add_argument('--batch_size',    type=int,    default=2)
     parser.add_argument('--lr',            type=float,  default=0.001,     help="initial learning rate")
@@ -228,3 +251,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     main(args)
+
+# %%

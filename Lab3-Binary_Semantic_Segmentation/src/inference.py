@@ -12,7 +12,9 @@ from torchvision import transforms
 
 from oxford_pet import SimpleOxfordPetDataset
 from models.unet import UNet
-from utils import plot_img_and_mask
+from models.resnet34_unet import UResNet34
+
+from utils import dice_coeff, plot_img_and_mask
 
 def predict_img(net,
                 full_img,
@@ -39,7 +41,8 @@ def predict_img(net,
 
 
 def get_args():
-    sys.argv = ['predict.py', '-i' ,'./dataset/images/Abyssinian_1.jpg', '-o', 'output-1.jpg', '-m' ,'./checkpoints/checkpoint_epoch5.pth']
+    sys.argv = ['predict.py' , '--model-select', '0', '-i' ,'./dataset/images/Abyssinian_1.jpg', '-o', 'output-1.jpg', '-m' ,'../saved_models/unet/DL_Lab3_UNet_312551013_謝竣宇.pth']
+    #sys.argv = ['predict.py', '--model-select', '1', '-i' ,'./dataset/images/Abyssinian_1.jpg', '-o', 'output-1.jpg', '-m' ,'../saved_models/res/DL_Lab3_ ResNet34_UNet _312551013_謝竣宇.pth']
     parser = argparse.ArgumentParser(description='Predict masks from input images')
     parser.add_argument('--model', '-m', default='MODEL.pth', metavar='FILE',
                         help='Specify the file in which the model is stored')
@@ -54,7 +57,8 @@ def get_args():
                         help='Scale factor for the input images')
     parser.add_argument('--bilinear', action='store_true', default=False, help='Use bilinear upsampling')
     parser.add_argument('--classes', '-c', type=int, default=2, help='Number of classes')
-    
+    parser.add_argument('--model-select', '-d', type=int, default=0, help='Type of model')
+
     args, unknown = parser.parse_known_args()
     return args
 
@@ -91,7 +95,11 @@ if __name__ == '__main__':
     test_dataset = SimpleOxfordPetDataset(path + "/../dataset", "test")
     out_files = get_output_filenames(args)
 
-    net = UNet(n_channels=3, n_classes=args.classes, bilinear=args.bilinear)
+    if args.model_select == 0:
+        net = UNet(n_channels=3, n_classes=args.classes, bilinear=args.bilinear)
+    else:
+        net = UResNet34(n_channels=3, n_classes=args.classes)
+
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     logging.info(f'Loading model {args.model}')
@@ -100,19 +108,31 @@ if __name__ == '__main__':
     net.to(device=device)
     state_dict = torch.load(args.model, map_location=device)
     mask_values = state_dict.pop('mask_values', [0, 1])
-    net.load_state_dict(state_dict)
+    net.load_state_dict(state_dict['state_dict'])
 
     logging.info('Model loaded!')
+    dice_score = 0
+    size = 0
 
     for i, data in enumerate(test_dataset):
-        logging.info(f'Predicting image  ...')
+        size += 1
+        #logging.info(f'Predicting image  ...')
         img = data['image']
-
-        mask = predict_img(net=net,
+        mask_true = data['mask'].squeeze(0)
+        
+        mask_pred = predict_img(net=net,
                            full_img=img,
                            scale_factor=args.scale,
                            out_threshold=args.mask_threshold,
                            device=device)
+        
+        transform1 = transforms.Compose([
+            transforms.ToTensor()
+            ]
+        )
+        mask_true_tensor = transform1(mask_true)
+        mask_pred_tensor = transform1(mask_pred)
+        dice_score += dice_coeff(mask_pred_tensor, mask_true_tensor, reduce_batch_first=False)
 
         if not args.no_save:
             pass
@@ -122,6 +142,10 @@ if __name__ == '__main__':
             #logging.info(f'Mask saved to {out_filename}')
 
         if args.viz:
-            logging.info(f'Visualizing results for image , close to continue...')
-            plot_img_and_mask(img, mask)
+            #logging.info(f'Visualizing results for image , close to continue...')
+            #plot_img_and_mask(img, mask_pred)
+            pass
+            
+    dice_score = dice_score / size
+    print(dice_score)
 # %%
