@@ -201,7 +201,7 @@ def main(args):
 
 
 if __name__ == '__main__':
-    sys.argv = ['Tester.py', '--DR', '../LAB4_Dataset', '--save_root', './testdata', '--ckpt_path' , './data-best/epoch=64.ckpt']
+    sys.argv = ['Tester.py', '--DR', '../LAB4_Dataset', '--save_root', './demo', '--ckpt_path' , './data-best/epoch=64.ckpt']
     parser = argparse.ArgumentParser(add_help=True)
     parser.add_argument('--batch_size',    type=int,    default=2)
     parser.add_argument('--lr',            type=float,  default=0.001,     help="initial learning rate")
