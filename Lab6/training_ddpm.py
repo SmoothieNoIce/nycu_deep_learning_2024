@@ -1,3 +1,4 @@
+from functools import partial
 import os
 import random
 import sys
@@ -7,7 +8,7 @@ import argparse
 from tqdm import tqdm
 from matplotlib import transforms
 from torchvision import utils as vutils
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Subset
 import torch
 import torch.backends.cudnn as cudnn
 import torch.nn as nn
@@ -21,6 +22,7 @@ from torch.utils.tensorboard import SummaryWriter
 from dataset import iclevrDataset
 from evaluator import evaluation_model
 from ddpm import ConditionedUNet
+import wandb
 
 class TrainDDPM:
     def __init__(self, args): 
@@ -34,11 +36,24 @@ class TrainDDPM:
 
         self.writer = SummaryWriter(args.log)
 
+    def load_state_dict(self, state_dict):
+        self.unet.load_state_dict(state_dict['state_dict'])
+        self.optimizer.load_state_dict(state_dict['optimizer'])
+        self.current_epoch = state_dict['last_epoch']
+
     def train(self, train_loader, val_loader):
         for epoch in range(self.args.start_from_epoch + 1, self.args.epochs + 1):
             self.current_epoch = epoch
             loss = self.train_one_epoch(epoch, train_loader)
+
+            self.writer.add_scalar('Train Epoch Loss', loss, epoch)
+            print(f'Train Epoch_{epoch} loss: {loss :.5f}\n')
+
             avg_acc = self.eval_one_epoch(epoch, val_loader)
+            print(f'Testing acc: {avg_acc:.2f}\n')
+            eval_metric = {"Training Epoch Loss": loss,"Testing acc": avg_acc}
+            wandb.log(eval_metric)
+
             self.save(loss, avg_acc)
     
     def train_one_epoch(self, epoch, train_loader):
@@ -67,6 +82,10 @@ class TrainDDPM:
 
             total_loss += loss.item()
 
+            if iters % 100 == 0:
+                self.writer.add_scalar('Train Step loss', loss.item(), iters)
+                wandb.log({"Training Step loss": loss.item()})
+
             pbar.set_description('[%d/%d][%d/%d] Loss: %.4f'
                 % (epoch, args.epochs, i, len(train_dataloader),
                     loss.item()))
@@ -80,30 +99,25 @@ class TrainDDPM:
         args = self.args
         evaluator = evaluation_model()
         self.unet.eval()
-        avg_acc = 0
         with torch.no_grad():
-            for sample in range(10):
-                for i, cond in enumerate(test_dataloader):
-                    cond = cond.to(args.device)
-                    batch_size = cond.size(0)
-                    noise = torch.randn(batch_size, 3, 64, 64, device=args.device)
+            for i, cond in enumerate(test_dataloader):
+                cond = cond.to(args.device)
+                batch_size = cond.size(0)
+                noise = torch.randn(batch_size, 3, 64, 64, device=args.device)
 
-                    for i, t in tqdm(enumerate(self.noise_scheduler.timesteps)):
-                        # Get model predict
-                        residual = self.unet(noise, t, cond)
-                        
-                        # Update sample with step
-                        noise = self.noise_scheduler.step(residual, t, noise).prev_sample
+                for i, t in tqdm(enumerate(self.noise_scheduler.timesteps)):
+                    # Get model predict
+                    residual = self.unet(noise, t, cond)
+                    
+                    # Update sample with step
+                    noise = self.noise_scheduler.step(residual, t, noise).prev_sample
 
-                    acc = evaluator.eval(noise, cond)
-                    vutils.save_image(vutils.make_grid(noise, nrow = 8, normalize = True),
-                        '%s/epoch_%d_fake_test_sample_%d.png' % ( args.outf, epoch, sample),
-                        normalize=True)
-                print(f'Sample {sample+1}: {acc*100:.2f}%')
-                avg_acc += acc
-            avg_acc /= 10
-            print(f'Average acc: {avg_acc*100:.2f}%')
-        return avg_acc
+                acc = evaluator.eval(noise, cond)
+                vutils.save_image(vutils.make_grid(noise, nrow = 8, normalize = True),
+                    '%s/epoch_%d_fake_test.png' % ( args.outf, epoch),
+                    normalize=True)
+            print(f'Sample : {acc*100:.2f}%')
+        return acc
 
     def save(self, loss, avg_acc):
         torch.save(
@@ -135,8 +149,8 @@ if __name__ == "__main__":
     parser.add_argument('--lr', default=0.0002, help='Learning rate')
     parser.add_argument('--c_dim', default=4, help='Condition dimension')
     parser.add_argument('--test_only', action='store_true')
-    parser.add_argument('--model_path', default='./checkpoint/DCGAN/outf_checkpoint', help='Path to save model checkpoint')
-    parser.add_argument("--outf", default="./checkpoint/DCGAN/outf", help="folder to output images")
+    parser.add_argument('--outf_checkpoint', default='./checkpoint/DDPM/outf_checkpoint', help='Path to save model checkpoint')
+    parser.add_argument("--outf", default="./checkpoint/DDPM/outf", help="folder to output images")
 
     parser.add_argument("--batch-size", type=int, default=10, help="Batch size for training.")
     parser.add_argument('--timesteps', default=1000, help='Time step for diffusion')
@@ -144,6 +158,7 @@ if __name__ == "__main__":
     parser.add_argument('--test_batch_size', default=32, help='Test batch size')
     parser.add_argument('--figure_file', default='figure/origin', help='Figure file')
     parser.add_argument('--resume', default=False, help='Continue for training')
+    parser.add_argument('--model_path', default='ckpt', help='Path to save model checkpoint')
     parser.add_argument('--ckpt', default='net.pth', help='Checkpoint for network')
 
     args = parser.parse_args()
@@ -158,16 +173,42 @@ if __name__ == "__main__":
         transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
     ])
 
+    traindataset = iclevrDataset(mode='train', dataset_root='iclevr', json_root='json')
+    traindataset_subset = Subset(traindataset, list(range(10)))
+
     train_dataloader = DataLoader(
-        iclevrDataset(mode='train', dataset_root='iclevr', json_root='json'),
+        traindataset,
         batch_size=args.batch_size,
         shuffle=True
     )
+
+    testdataset = iclevrDataset(mode='test', dataset_root='iclevr', json_root='json')
+    testdataset_subset = Subset(testdataset, list(range(10)))
+
     test_dataloader = DataLoader(
-        iclevrDataset(mode='test', dataset_root='iclevr', json_root='json'),
+        testdataset,
         batch_size=args.batch_size,
         shuffle=False
     )
 
-    train_dcgan = TrainDDPM(args)
-    train_dcgan.train(train_dataloader, test_dataloader)
+    wandb.init(
+        project = 'Deep Learning Lab7',
+        config = {"batch_size":args.batch_size, 
+                "epoch": 60, 
+                "embedding": "nn.Linear", 
+                "Type": "DDDDAA",
+                "Block_size": 'bigger',
+                "Resume": False
+        },
+        name = "Big block"
+    )
+    
+
+    train_ddpm = TrainDDPM(args)
+
+    if args.resume:
+        train_ddpm.load_state_dict(torch.load(os.path.join(args.model_path, args.ckpt)))
+
+    train_ddpm.train(train_dataloader, test_dataloader)
+    
+    wandb.finish()
