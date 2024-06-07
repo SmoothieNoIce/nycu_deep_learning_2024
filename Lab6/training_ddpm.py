@@ -205,7 +205,7 @@ if __name__ == "__main__":
     )
 
     wandb.init(
-        project = 'Deep Learning Lab7',
+        project = 'Deep Learning Lab6 Flexolk',
         config = {"batch_size":args.batch_size, 
                 "epoch": 60, 
                 "embedding": "nn.Linear", 
