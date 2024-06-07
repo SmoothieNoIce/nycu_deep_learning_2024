@@ -1,0 +1,129 @@
+2024-06-07 15:04:22,169 INFO    StreamThr :703870 [internal.py:wandb_internal():86] W&B internal server running at pid: 703870, started at: 2024-06-07 15:04:22.166726
+2024-06-07 15:04:22,179 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: status
+2024-06-07 15:04:22,182 INFO    WriterThread:703870 [datastore.py:open_for_write():87] open: /home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/wandb/run-20240607_150422-ua0j63yb/run-ua0j63yb.wandb
+2024-06-07 15:04:22,183 DEBUG   SenderThread:703870 [sender.py:send():379] send: header
+2024-06-07 15:04:22,183 DEBUG   SenderThread:703870 [sender.py:send():379] send: run
+2024-06-07 15:04:22,692 INFO    SenderThread:703870 [dir_watcher.py:__init__():211] watching files in: /home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/wandb/run-20240607_150422-ua0j63yb/files
+2024-06-07 15:04:22,692 INFO    SenderThread:703870 [sender.py:_start_run_threads():1124] run started: ua0j63yb with start time 1717743862.166235
+2024-06-07 15:04:22,703 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: check_version
+2024-06-07 15:04:22,704 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: check_version
+2024-06-07 15:04:22,948 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: run_start
+2024-06-07 15:04:22,962 DEBUG   HandlerThread:703870 [system_info.py:__init__():26] System info init
+2024-06-07 15:04:22,962 DEBUG   HandlerThread:703870 [system_info.py:__init__():41] System info init done
+2024-06-07 15:04:22,963 INFO    HandlerThread:703870 [system_monitor.py:start():194] Starting system monitor
+2024-06-07 15:04:22,963 INFO    HandlerThread:703870 [system_monitor.py:probe():214] Collecting system info
+2024-06-07 15:04:22,964 INFO    SystemMonitor:703870 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-06-07 15:04:22,966 INFO    SystemMonitor:703870 [interfaces.py:start():190] Started cpu monitoring
+2024-06-07 15:04:22,968 INFO    SystemMonitor:703870 [interfaces.py:start():190] Started disk monitoring
+2024-06-07 15:04:22,970 INFO    SystemMonitor:703870 [interfaces.py:start():190] Started gpu monitoring
+2024-06-07 15:04:22,973 INFO    SystemMonitor:703870 [interfaces.py:start():190] Started memory monitoring
+2024-06-07 15:04:22,975 INFO    SystemMonitor:703870 [interfaces.py:start():190] Started network monitoring
+2024-06-07 15:04:22,978 DEBUG   HandlerThread:703870 [system_info.py:probe():150] Probing system
+2024-06-07 15:04:23,020 DEBUG   HandlerThread:703870 [system_info.py:_probe_git():135] Probing git
+2024-06-07 15:04:23,026 DEBUG   HandlerThread:703870 [system_info.py:_probe_git():143] Probing git done
+2024-06-07 15:04:23,026 DEBUG   HandlerThread:703870 [system_info.py:probe():198] Probing system done
+2024-06-07 15:04:23,026 DEBUG   HandlerThread:703870 [system_monitor.py:probe():223] {'os': 'Linux-5.15.146.1-microsoft-standard-WSL2-x86_64-with-glibc2.35', 'python': '3.10.12', 'heartbeatAt': '2024-06-07T07:04:22.979232', 'startedAt': '2024-06-07T07:04:22.153925', 'docker': None, 'cuda': None, 'args': ('--save_root', './data'), 'state': 'running', 'program': '/home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/training_ddpm.py', 'codePathLocal': 'training_ddpm.py', 'codePath': 'Lab6/training_ddpm.py', 'git': {'remote': 'https://github.com/SmoothieNoIce/nycu_deep_learning_2024.git', 'commit': '764637430d3221ee56dc77f760be6d6fed66dd74'}, 'email': 'dev@flexolk.me', 'root': '/home/demo/dl-homework-wsl/nycu_deep_learning_2024', 'host': 'DESKTOP-HI0K18I', 'username': 'demo', 'executable': '/home/demo/dl-homework-wsl/dl-venv/bin/python', 'cpu_count': 3, 'cpu_count_logical': 6, 'cpu_freq': {'current': 2496.001, 'min': 0.0, 'max': 0.0}, 'cpu_freq_per_core': [{'current': 2496.001, 'min': 0.0, 'max': 0.0}, {'current': 2496.001, 'min': 0.0, 'max': 0.0}, {'current': 2496.001, 'min': 0.0, 'max': 0.0}, {'current': 2496.001, 'min': 0.0, 'max': 0.0}, {'current': 2496.001, 'min': 0.0, 'max': 0.0}, {'current': 2496.001, 'min': 0.0, 'max': 0.0}], 'disk': {'/': {'total': 250.92389297485352, 'used': 101.20461654663086}}, 'gpu': 'NVIDIA GeForce RTX 3060 Ti', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 3060 Ti', 'memory_total': 8589934592}], 'memory': {'total': 31.100078582763672}}
+2024-06-07 15:04:23,026 INFO    HandlerThread:703870 [system_monitor.py:probe():224] Finished collecting system info
+2024-06-07 15:04:23,026 INFO    HandlerThread:703870 [system_monitor.py:probe():227] Publishing system info
+2024-06-07 15:04:23,027 INFO    HandlerThread:703870 [system_monitor.py:probe():229] Finished publishing system info
+2024-06-07 15:04:23,033 DEBUG   SenderThread:703870 [sender.py:send():379] send: files
+2024-06-07 15:04:23,033 INFO    SenderThread:703870 [sender.py:_save_file():1390] saving file wandb-metadata.json with policy now
+2024-06-07 15:04:23,212 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: python_packages
+2024-06-07 15:04:23,212 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: python_packages
+2024-06-07 15:04:23,213 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: stop_status
+2024-06-07 15:04:23,214 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: stop_status
+2024-06-07 15:04:23,218 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: internal_messages
+2024-06-07 15:04:23,567 DEBUG   SenderThread:703870 [sender.py:send():379] send: telemetry
+2024-06-07 15:04:23,696 INFO    Thread-17 :703870 [dir_watcher.py:_on_file_created():271] file/dir created: /home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/wandb/run-20240607_150422-ua0j63yb/files/wandb-metadata.json
+2024-06-07 15:04:23,697 INFO    Thread-17 :703870 [dir_watcher.py:_on_file_created():271] file/dir created: /home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/wandb/run-20240607_150422-ua0j63yb/files/requirements.txt
+2024-06-07 15:04:23,755 INFO    wandb-upload_0:703870 [upload_job.py:push():131] Uploaded file /tmp/tmp65eal5cmwandb/keqcipfd-wandb-metadata.json
+2024-06-07 15:04:25,694 INFO    Thread-17 :703870 [dir_watcher.py:_on_file_created():271] file/dir created: /home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/wandb/run-20240607_150422-ua0j63yb/files/output.log
+2024-06-07 15:04:27,380 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: status_report
+2024-06-07 15:04:27,695 INFO    Thread-17 :703870 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/wandb/run-20240607_150422-ua0j63yb/files/output.log
+2024-06-07 15:04:32,382 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: status_report
+2024-06-07 15:04:33,659 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: partial_history
+2024-06-07 15:04:33,661 DEBUG   SenderThread:703870 [sender.py:send():379] send: history
+2024-06-07 15:04:33,664 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: summary_record
+2024-06-07 15:04:33,665 INFO    SenderThread:703870 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-06-07 15:04:33,697 INFO    Thread-17 :703870 [dir_watcher.py:_on_file_created():271] file/dir created: /home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/wandb/run-20240607_150422-ua0j63yb/files/wandb-summary.json
+2024-06-07 15:04:35,698 INFO    Thread-17 :703870 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/wandb/run-20240607_150422-ua0j63yb/files/output.log
+2024-06-07 15:04:37,599 DEBUG   SenderThread:703870 [sender.py:send():379] send: exit
+2024-06-07 15:04:37,599 INFO    SenderThread:703870 [sender.py:send_exit():586] handling exit code: 255
+2024-06-07 15:04:37,599 INFO    SenderThread:703870 [sender.py:send_exit():588] handling runtime: 14
+2024-06-07 15:04:37,599 INFO    SenderThread:703870 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-06-07 15:04:37,600 INFO    SenderThread:703870 [sender.py:send_exit():594] send defer
+2024-06-07 15:04:37,600 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: defer
+2024-06-07 15:04:37,600 INFO    HandlerThread:703870 [handler.py:handle_request_defer():172] handle defer: 0
+2024-06-07 15:04:37,600 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: status_report
+2024-06-07 15:04:37,601 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: defer
+2024-06-07 15:04:37,601 INFO    SenderThread:703870 [sender.py:send_request_defer():610] handle sender defer: 0
+2024-06-07 15:04:37,601 INFO    SenderThread:703870 [sender.py:transition_state():614] send defer: 1
+2024-06-07 15:04:37,601 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: defer
+2024-06-07 15:04:37,601 INFO    HandlerThread:703870 [handler.py:handle_request_defer():172] handle defer: 1
+2024-06-07 15:04:37,601 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: defer
+2024-06-07 15:04:37,601 INFO    SenderThread:703870 [sender.py:send_request_defer():610] handle sender defer: 1
+2024-06-07 15:04:37,601 INFO    SenderThread:703870 [sender.py:transition_state():614] send defer: 2
+2024-06-07 15:04:37,601 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: defer
+2024-06-07 15:04:37,601 INFO    HandlerThread:703870 [handler.py:handle_request_defer():172] handle defer: 2
+2024-06-07 15:04:37,602 INFO    HandlerThread:703870 [system_monitor.py:finish():203] Stopping system monitor
+2024-06-07 15:04:37,602 DEBUG   SystemMonitor:703870 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-06-07 15:04:37,602 DEBUG   SystemMonitor:703870 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-06-07 15:04:37,602 DEBUG   SystemMonitor:703870 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-06-07 15:04:37,603 INFO    HandlerThread:703870 [interfaces.py:finish():202] Joined cpu monitor
+2024-06-07 15:04:37,604 INFO    HandlerThread:703870 [interfaces.py:finish():202] Joined disk monitor
+2024-06-07 15:04:37,619 INFO    HandlerThread:703870 [interfaces.py:finish():202] Joined gpu monitor
+2024-06-07 15:04:37,620 INFO    HandlerThread:703870 [interfaces.py:finish():202] Joined memory monitor
+2024-06-07 15:04:37,620 INFO    HandlerThread:703870 [interfaces.py:finish():202] Joined network monitor
+2024-06-07 15:04:37,621 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: defer
+2024-06-07 15:04:37,621 INFO    SenderThread:703870 [sender.py:send_request_defer():610] handle sender defer: 2
+2024-06-07 15:04:37,621 INFO    SenderThread:703870 [sender.py:transition_state():614] send defer: 3
+2024-06-07 15:04:37,621 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: defer
+2024-06-07 15:04:37,621 INFO    HandlerThread:703870 [handler.py:handle_request_defer():172] handle defer: 3
+2024-06-07 15:04:37,621 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: defer
+2024-06-07 15:04:37,621 INFO    SenderThread:703870 [sender.py:send_request_defer():610] handle sender defer: 3
+2024-06-07 15:04:37,621 INFO    SenderThread:703870 [sender.py:transition_state():614] send defer: 4
+2024-06-07 15:04:37,622 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: defer
+2024-06-07 15:04:37,622 INFO    HandlerThread:703870 [handler.py:handle_request_defer():172] handle defer: 4
+2024-06-07 15:04:37,622 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: defer
+2024-06-07 15:04:37,622 INFO    SenderThread:703870 [sender.py:send_request_defer():610] handle sender defer: 4
+2024-06-07 15:04:37,622 INFO    SenderThread:703870 [sender.py:transition_state():614] send defer: 5
+2024-06-07 15:04:37,622 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: defer
+2024-06-07 15:04:37,622 INFO    HandlerThread:703870 [handler.py:handle_request_defer():172] handle defer: 5
+2024-06-07 15:04:37,623 DEBUG   SenderThread:703870 [sender.py:send():379] send: summary
+2024-06-07 15:04:37,624 INFO    SenderThread:703870 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-06-07 15:04:37,624 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: defer
+2024-06-07 15:04:37,624 INFO    SenderThread:703870 [sender.py:send_request_defer():610] handle sender defer: 5
+2024-06-07 15:04:37,624 INFO    SenderThread:703870 [sender.py:transition_state():614] send defer: 6
+2024-06-07 15:04:37,624 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: defer
+2024-06-07 15:04:37,624 INFO    HandlerThread:703870 [handler.py:handle_request_defer():172] handle defer: 6
+2024-06-07 15:04:37,624 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: defer
+2024-06-07 15:04:37,625 INFO    SenderThread:703870 [sender.py:send_request_defer():610] handle sender defer: 6
+2024-06-07 15:04:37,630 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: status_report
+2024-06-07 15:04:37,699 INFO    Thread-17 :703870 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/wandb/run-20240607_150422-ua0j63yb/files/wandb-summary.json
+2024-06-07 15:04:37,699 INFO    Thread-17 :703870 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/wandb/run-20240607_150422-ua0j63yb/files/output.log
+2024-06-07 15:04:37,843 INFO    SenderThread:703870 [sender.py:transition_state():614] send defer: 7
+2024-06-07 15:04:37,844 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: defer
+2024-06-07 15:04:37,844 INFO    HandlerThread:703870 [handler.py:handle_request_defer():172] handle defer: 7
+2024-06-07 15:04:37,844 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: defer
+2024-06-07 15:04:37,844 INFO    SenderThread:703870 [sender.py:send_request_defer():610] handle sender defer: 7
+2024-06-07 15:04:38,599 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: poll_exit
+2024-06-07 15:04:38,699 INFO    Thread-17 :703870 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/wandb/run-20240607_150422-ua0j63yb/files/config.yaml
+2024-06-07 15:04:39,416 INFO    SenderThread:703870 [sender.py:transition_state():614] send defer: 8
+2024-06-07 15:04:39,417 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: poll_exit
+2024-06-07 15:04:39,417 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: defer
+2024-06-07 15:04:39,417 INFO    HandlerThread:703870 [handler.py:handle_request_defer():172] handle defer: 8
+2024-06-07 15:04:39,418 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: defer
+2024-06-07 15:04:39,418 INFO    SenderThread:703870 [sender.py:send_request_defer():610] handle sender defer: 8
+2024-06-07 15:04:39,419 INFO    SenderThread:703870 [job_builder.py:build():318] Attempting to build job artifact
+2024-06-07 15:04:39,420 INFO    SenderThread:703870 [job_builder.py:_get_source_type():455] is repo sourced job
+2024-06-07 15:04:39,600 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: poll_exit
+2024-06-07 15:04:39,700 INFO    Thread-17 :703870 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/wandb/run-20240607_150422-ua0j63yb/files/output.log
+2024-06-07 15:04:40,649 INFO    SenderThread:703870 [job_builder.py:build():431] adding wandb-job metadata file
+2024-06-07 15:04:40,657 INFO    SenderThread:703870 [sender.py:transition_state():614] send defer: 9
+2024-06-07 15:04:40,657 DEBUG   SenderThread:703870 [sender.py:send_request():406] send_request: poll_exit
+2024-06-07 15:04:40,658 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: defer
+2024-06-07 15:04:40,658 INFO    HandlerThread:703870 [handler.py:handle_request_defer():172] handle defer: 9
+2024-06-07 15:04:40,658 DEBUG   SenderThread:703870 [sender.py:send():379] send: artifact
+2024-06-07 15:04:41,602 DEBUG   HandlerThread:703870 [handler.py:handle_request():146] handle_request: poll_exit
+2024-06-07 15:04:42,147 INFO    wandb-upload_1:703870 [upload_job.py:push():89] Uploaded file /tmp/tmpwf6c0bou/wandb-job.json
+2024-06-07 15:04:42,209 INFO    wandb-upload_0:703870 [upload_job.py:push():89] Uploaded file /home/demo/.local/share/wandb/artifacts/staging/tmpd7zyl6hv

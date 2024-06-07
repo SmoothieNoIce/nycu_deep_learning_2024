@@ -1,0 +1,81 @@
+{
+    "os": "Linux-5.15.146.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+    "python": "3.10.12",
+    "heartbeatAt": "2024-06-07T07:04:22.979232",
+    "startedAt": "2024-06-07T07:04:22.153925",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--save_root",
+        "./data"
+    ],
+    "state": "running",
+    "program": "/home/demo/dl-homework-wsl/nycu_deep_learning_2024/Lab6/training_ddpm.py",
+    "codePathLocal": "training_ddpm.py",
+    "codePath": "Lab6/training_ddpm.py",
+    "git": {
+        "remote": "https://github.com/SmoothieNoIce/nycu_deep_learning_2024.git",
+        "commit": "764637430d3221ee56dc77f760be6d6fed66dd74"
+    },
+    "email": "dev@flexolk.me",
+    "root": "/home/demo/dl-homework-wsl/nycu_deep_learning_2024",
+    "host": "DESKTOP-HI0K18I",
+    "username": "demo",
+    "executable": "/home/demo/dl-homework-wsl/dl-venv/bin/python",
+    "cpu_count": 3,
+    "cpu_count_logical": 6,
+    "cpu_freq": {
+        "current": 2496.001,
+        "min": 0.0,
+        "max": 0.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2496.001,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2496.001,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2496.001,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2496.001,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2496.001,
+            "min": 0.0,
+            "max": 0.0
+        },
+        {
+            "current": 2496.001,
+            "min": 0.0,
+            "max": 0.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 250.92389297485352,
+            "used": 101.20461654663086
+        }
+    },
+    "gpu": "NVIDIA GeForce RTX 3060 Ti",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 3060 Ti",
+            "memory_total": 8589934592
+        }
+    ],
+    "memory": {
+        "total": 31.100078582763672
+    }
+}

@@ -28,6 +28,7 @@ class TrainDDPM:
     def __init__(self, args): 
         self.args = args
         self.current_epoch = 0
+        self.best_acc = 0
 
         self.unet = ConditionedUNet(args).to(args.device)
         self.noise_scheduler = DDPMScheduler(args.timesteps)
@@ -40,6 +41,7 @@ class TrainDDPM:
         self.unet.load_state_dict(state_dict['state_dict'])
         self.optimizer.load_state_dict(state_dict['optimizer'])
         self.current_epoch = state_dict['last_epoch']
+        self.best_acc = state_dict['best_acc']
 
     def train(self, train_loader, val_loader):
         for epoch in range(self.args.start_from_epoch + 1, self.args.epochs + 1):
@@ -47,14 +49,20 @@ class TrainDDPM:
             loss = self.train_one_epoch(epoch, train_loader)
 
             self.writer.add_scalar('Train Epoch Loss', loss, epoch)
-            print(f'Train Epoch_{epoch} loss: {loss :.5f}\n')
+            print(f'Train Epoch_{epoch} loss: {loss}\n')
 
             avg_acc = self.eval_one_epoch(epoch, val_loader)
-            print(f'Testing acc: {avg_acc:.2f}\n')
+            print(f'Testing acc: {avg_acc}\n')
             eval_metric = {"Training Epoch Loss": loss,"Testing acc": avg_acc}
             wandb.log(eval_metric)
 
-            self.save(loss, avg_acc)
+            is_best = False
+            if avg_acc > self.best_acc:
+                self.best_acc = avg_acc
+                is_best = True
+                print(f'New Best Acc! Epoch_{epoch} acc: {avg_acc}\n')
+
+            self.save(loss, avg_acc, is_best)
     
     def train_one_epoch(self, epoch, train_loader):
         iters = 0
@@ -119,19 +127,24 @@ class TrainDDPM:
             print(f'Sample : {acc*100:.2f}%')
         return acc
 
-    def save(self, loss, avg_acc):
+    def save(self, loss, avg_acc, is_best=False):
+        if is_best:
+            text = f"{self.args.outf_checkpoint}/unet_epoch_{self.current_epoch}_{avg_acc}_best.pth",
+        else:
+            text = f"{self.args.outf_checkpoint}/unet_epoch_{self.current_epoch}_{avg_acc}.pth",
         torch.save(
             {
                 "state_dict": self.unet.state_dict(),
+                "optimizer": self.optimizer.state_dict(),
                 "lr": self.args.lr,
                 "last_epoch": self.current_epoch,
                 "avg_acc": avg_acc,
                 "loss": loss,
+                "best_acc": self.best_acc,
             },
-            f"{self.args.outf_checkpoint}/unet_epoch_{self.current_epoch}_{avg_acc}.pth",
+            text,
         )
         print(f"save ckpt")
-
 
 if __name__ == "__main__":
     sys.argv = ["training.py", "--save_root", "./data"]
