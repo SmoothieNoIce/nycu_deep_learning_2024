@@ -1,2 +1,7 @@
 *.png
 *.csv
+/data
+/data-cosine
+/data-linear
+/data-square
+/models/VQGAN/checkpoints/VQGAN.pt

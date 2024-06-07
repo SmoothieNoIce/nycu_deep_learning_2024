@@ -318,7 +318,7 @@ class VAE_Model(nn.Module):
             self.kl_annealing = kl_annealing(self.args, current_epoch=checkpoint['last_epoch'])
             self.current_epoch = checkpoint['last_epoch']
             self.all_loss = checkpoint['all_loss']
-            self.all_teacher_forcing_ratio = checkpoint['all_teacher_forcing_ratio']
+            #self.all_teacher_forcing_ratio = checkpoint['all_teacher_forcing_ratio']
 
     def optimizer_step(self):
         nn.utils.clip_grad_norm_(self.parameters(), 1.)
@@ -330,7 +330,7 @@ def main(args):
     
     os.makedirs(args.save_root, exist_ok=True)
     model = VAE_Model(args).to(args.device)
-    model.load_checkpoint()
+    #model.load_checkpoint()
     if args.test:
         model.eval()
     else:
@@ -340,7 +340,7 @@ def main(args):
 
 
 if __name__ == '__main__':
-    sys.argv = ['Trainer.py', '--DR', '../LAB4_Dataset', '--save_root', './data', '--ckpt_path' , './data-best/epoch=64.ckpt' , '--test' ]
+    sys.argv = ['Trainer.py', '--DR', '../LAB4_Dataset', '--save_root', './data', '--ckpt_path' , './data-best/epoch=64.ckpt'  ]
     parser = argparse.ArgumentParser(add_help=True)
     parser.add_argument('--batch_size',    type=int,    default=2)
     parser.add_argument('--lr',            type=float,  default=0.001,     help="initial learning rate")
